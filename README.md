@@ -7,6 +7,14 @@ After cloning this repo, run:
 npm install
 ```
 
+Next, create a file named `.env`. Add the following to it and replace the values with your Spotify API keys:
+```js
+# Spotify API keys
+
+SPOTIFY_ID=your-spotify-id
+SPOTIFY_SECRET=your-spotify-secret
+```
+
 ## Usage
 ![usage](images/usage-example.png)
 
