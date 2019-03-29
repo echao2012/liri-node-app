@@ -7,20 +7,20 @@ After cloning this repo, run:
 npm install
 ```
 
-## Usage<hr>
+## Usage
 ![usage](images/usage-example.png)
 
 
-## concert-this<hr>
+## concert-this
 Get a list of concerts for the artist "Slayer":  
 ![concert](images/concert-example.png)
 
 
-## spotify-this-song<hr>
+## spotify-this-song
 Get details for the song "Penny Lane":  
 ![spotify](images/spotify-example.png)
 
 
-## movie-this<hr>
+## movie-this
 Get details for the movie "The Matrix":  
 ![movie](images/movie-example.png)
