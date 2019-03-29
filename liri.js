@@ -1,5 +1,6 @@
 // Require package statements
 const axios = require("axios");
+const chalk = require("chalk");
 require("dotenv").config();
 const fs = require("fs");
 const moment = require("moment");
@@ -18,7 +19,7 @@ if(cmd === "do-what-it-says") {
     // Read the command from file
     fs.readFile("random.txt", "utf8", function(err, data) {
         if(err) {
-            return console.log("Error occurred: " + err);
+            return console.log(chalk.red("Error occurred: " + err));
         }
 
         // Split command and name by comma
@@ -36,7 +37,7 @@ function processCommand(cmd, name) {
             if(name) {
                 getConcert(name);
             } else {
-                console.log("Please provide an artist name");
+                console.log(chalk.red("Please provide an artist name"));
             }
             break;
         
@@ -59,6 +60,15 @@ function processCommand(cmd, name) {
             break;
         
         default:
+            console.log(chalk.blue(`
+Usage:    node liri concert-this <artist name>
+          node liri spotify-this-song <song name>
+          node liri movie-this <movie name>
+
+Examples: node liri concert-this Slayer
+          node liri spotify-this-song Penny Lane
+          node liri movie-this The Matrix
+            `))
             break;
     }
 }
@@ -68,20 +78,21 @@ function getConcert(artistName) {
     const queryUrl = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp";
     axios.get(queryUrl).then(function(response) {
         // Log each event
+        console.log();
         response.data.forEach(event => {
-            // Log venue name 
-            console.log("Venue: " + event.venue.name);
+            // Log venue name
+            console.log(chalk.green("Venue: ") + chalk.yellow(event.venue.name));
 
             if(event.venue.region) {
                 // Log city, region(state), and country 
-                console.log("Location: " + event.venue.city + ", " + event.venue.region + ", " + event.venue.country);
+                console.log(chalk.green("Location: ") + chalk.yellow(event.venue.city + ", " + event.venue.region + ", " + event.venue.country));
             } else {
                 // Only log city and country - omit region if it is missing
-                console.log("Location: " + event.venue.city + ", " + event.venue.country);
+                console.log(chalk.green("Location: ") + chalk.yellow(event.venue.city + ", " + event.venue.country));
             }
 
             // Log the date of the concert
-            console.log("Date: " + moment(event.datetime).format("MM/DD/YYYY"));
+            console.log(chalk.green("Date: ") + chalk.yellow(moment(event.datetime).format("MM/DD/YYYY")));
             console.log();
         });
     });
@@ -91,7 +102,7 @@ function getSong(songName) {
     // Get song info from Spotify
     spotify.search({ type: 'track', query: songName, limit: 1 }, function(err, data) {
         if(err) {
-            return console.log("Error occurred: " + err);
+            return console.log(chalk.red("Error occurred: " + err));
         }
 
         // Only look at the first result
@@ -104,12 +115,16 @@ function getSong(songName) {
             let artists = songInfo.artists.map(artist => artist.name).slice(0).join(", ");
             
             // Log the song info
-            console.log("Artist: " + artists);
-            console.log("Song: " + songInfo.name);
-            console.log("Album: " + songInfo.album.name);
-            console.log("Preview Link: " + songInfo.external_urls.spotify);
+            console.log();
+            console.log(chalk.green("Artist: ") + chalk.yellow(artists));
+            console.log(chalk.green("Song: ") + chalk.yellow(songInfo.name));
+            console.log(chalk.green("Album: ") + chalk.yellow(songInfo.album.name));
+            console.log(chalk.green("Preview Link: ") + chalk.yellow(songInfo.external_urls.spotify));
+            console.log();
         } else {
-            console.log("Could not find song info for: " + songName);
+            console.log();
+            console.log(chalk.red("Could not find song info for: " + songName));
+            console.log();
         }
     });
 }
@@ -119,16 +134,18 @@ function getMovie(movieName) {
     const queryUrl = "https://www.omdbapi.com/?t=" + movieName + "&plot=short&apikey=trilogy";
     axios.get(queryUrl).then(function(response) {
         // Log the Title and Year
-        console.log("Title: " + response.data.Title);
-        console.log("Release Year: " + response.data.Year);
+        console.log();
+        console.log(chalk.green("Title: ") + chalk.yellow(response.data.Title));
+        console.log(chalk.green("Release Year: ") + chalk.yellow(response.data.Year));
 
         // Ratings are an array of objects - find the object with the matching Source name
-        console.log("IMDB Rating: " + response.data.Ratings.find(rating => rating.Source === "Internet Movie Database").Value);
-        console.log("Rotten Tomatoes Rating: " + response.data.Ratings.find(rating => rating.Source === "Rotten Tomatoes").Value);
+        console.log(chalk.green("IMDB Rating: ") + chalk.yellow(response.data.Ratings.find(rating => rating.Source === "Internet Movie Database").Value));
+        console.log(chalk.green("Rotten Tomatoes Rating: ") + chalk.yellow(response.data.Ratings.find(rating => rating.Source === "Rotten Tomatoes").Value));
 
         // Log the Country, Language, and Actors list
-        console.log("Country: " + response.data.Country);
-        console.log("Language: " + response.data.Language);
-        console.log("Actors: " + response.data.Actors);
-    })
+        console.log(chalk.green("Country: ") + chalk.yellow(response.data.Country));
+        console.log(chalk.green("Language: ") + chalk.yellow(response.data.Language));
+        console.log(chalk.green("Actors: ") + chalk.yellow(response.data.Actors));
+        console.log();
+    });
 }
