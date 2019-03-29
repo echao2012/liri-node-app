@@ -11,16 +11,16 @@ npm install
 ![usage](images/usage-example.png)
 
 
-## concert-this
+### concert-this
 Get a list of concerts for the artist "Slayer":  
 ![concert](images/concert-example.png)
 
 
-## spotify-this-song
+### spotify-this-song
 Get details for the song "Penny Lane":  
 ![spotify](images/spotify-example.png)
 
 
-## movie-this
+### movie-this
 Get details for the movie "The Matrix":  
 ![movie](images/movie-example.png)
